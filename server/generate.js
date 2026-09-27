@@ -24,7 +24,22 @@ const responseTemplate = `{
 ]
 }`
 
-app.use(cors())
+const ALLOWED_ORIGINS = [
+	'http://localhost:5173',
+	'https://flam-study-assistent-project.vercel.app',
+]
+
+app.use(cors({
+	origin(origin, callback) {
+		// Allow no-origin requests (curl, health checks) and whitelisted origins only.
+		if (!origin || ALLOWED_ORIGINS.includes(origin)) {
+			callback(null, true)
+			return
+		}
+
+		callback(new Error(`Origin ${origin} is not allowed by CORS.`))
+	},
+}))
 app.use(express.json({ limit: '1mb' }))
 
 function buildGeminiPrompt(userPrompt) {
