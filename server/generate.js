@@ -27,6 +27,7 @@ const responseTemplate = `{
 const ALLOWED_ORIGINS = [
 	'http://localhost:5173',
 	'https://flam-study-assistent-project-taupe.vercel.app',
+	'https://flam-study-assistent-project.vercel.app/',
 ]
 
 app.use(cors({

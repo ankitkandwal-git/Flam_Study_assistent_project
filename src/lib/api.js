@@ -1,5 +1,6 @@
 // Falls back to relative '/api' so local dev keeps using the Vite proxy.
 const apiBaseUrl = (import.meta.env.VITE_API_URL || '').replace(/\/$/, '')
+console.log("API URL:", apiBaseUrl);
 
 export async function generateFlashcards(prompt) {
 	const response = await fetch(`${apiBaseUrl}/api/generate`, {
