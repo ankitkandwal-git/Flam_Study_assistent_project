@@ -26,13 +26,11 @@ const responseTemplate = `{
 
 const ALLOWED_ORIGINS = [
 	'http://localhost:5173',
-	'https://flam-study-assistent-project-taupe.vercel.app',
-	'https://flam-study-assistent-project.vercel.app/',
+	'https://flam-study-assistent-project.vercel.app',
 ]
 
-app.use(cors({
+const corsOptions = {
 	origin(origin, callback) {
-		// Allow no-origin requests (curl, health checks) and whitelisted origins only.
 		if (!origin || ALLOWED_ORIGINS.includes(origin)) {
 			callback(null, true)
 			return
@@ -40,7 +38,12 @@ app.use(cors({
 
 		callback(new Error(`Origin ${origin} is not allowed by CORS.`))
 	},
-}))
+}
+
+// cors() must run before any route/body-parsing middleware so preflight
+// OPTIONS requests are answered before reaching express.json().
+app.use(cors(corsOptions))
+app.options(/.*/, cors(corsOptions))
 app.use(express.json({ limit: '1mb' }))
 
 function buildGeminiPrompt(userPrompt) {
